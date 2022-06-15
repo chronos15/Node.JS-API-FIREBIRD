@@ -1,16 +1,18 @@
 {
-  "name": "servidor-firebird",
+  "name": "node-firebird-examples",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "body-parser": "^1.20.0",
-    "express": "^4.18.1",
-    "node-firebird": "^1.0.0"
+    "cors": "^2.8.5",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "node-firebird": "^0.9.9"
   }
 }

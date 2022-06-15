@@ -1,53 +1,26 @@
-const express = require('express');
-const app = express();         
-const bodyParser = require('body-parser');
-const port = 3000; //porta padrão
-const firebird = require('node-firebird');
+const express = require("express");
+const app = express();
+const cors = require("cors");
+require("dotenv").config();
 
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
+app.use(express.json({ limit: 5000 }));
+app.use(cors());
 
-//definindo as rotas
-const router = express.Router();
-router.get('/', (req, res) => res.json({ message: 'Funcionando!' }));
-app.use('/', router);
+const controller = require("./controller");
 
-//inicia o servidor
-app.listen(port);
-console.log('API funcionando!');
+app.get(["/", "/api"], (req, res) => {
+  console.log(req.url);
+  res.status(200).json({ ok: true, message: "Node API Firebird" });
+});
 
+app.get("/api/clientes", async (req, res) => {
+  await controller.getClientes(res);
+});
 
+app.get("/api/ordem", async (req, res) => {
+  await controller.getOrdem(res);
+});
 
-const configuracoes = {
-  database: 'C:/SOFTWORK/SOFTWORK.FDB',
-  user: 'SYSDBA',
-  password: 'swfppa215',
-};
+const port = process.env.PORT || 3333;
 
-const pool = firebird.pool(5, configuracoes);
-
-const executar = (query) => {
-  return new Promise((resolver, rejeitar) => {
-    pool.get((err, db) => {
-      if (err) {
-        rejeitar(err);
-        return;
-      }
-
-      db.query(query, (erro, resultado) => {
-        if (erro) {
-          rejeitar(err);
-          return;
-        }
-
-        db.detach();
-        resolver(resultado);
-      });
-    });
-  });
-}
-
-(async () => {
-    console.log(await executar('SELECT * FROM TEST'));
-  })();
-
+app.listen(port, () => console.log(`Server rodando na porta ${port}`));
